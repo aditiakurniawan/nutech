@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-// import example from "../assets/images/example.png";
-// import view from "../assets/icon/View.png";
-// import edit from "../assets/icon/Edit.png";
-// import delet from "../assets/icon/Delete.png";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
@@ -11,11 +7,13 @@ import { useQuery } from "react-query";
 import { useMutation } from "react-query";
 import { API } from "../config/api";
 import Delete from "../components/modal/Delete";
+import { Pagination } from "@mantine/core";
+import logo from "../assets/images/Logo.png";
+import Tbl from "./Tbl";
 
 function DataBarang() {
   document.title = `My Stock`;
   const state = useContext(UserContext);
-  // const [userLinks, setUserLinks] = useState([]);
 
   const [dataFilter, setDataFilter] = useState([]);
 
@@ -34,24 +32,7 @@ function DataBarang() {
     return response.data.data;
   });
   console.log("ini", barangs);
-  // let count = state.length;
-
-  function handleChangeBarang(e) {
-    if (!e.target.value) {
-      setDataFilter(barangs);
-      return;
-    }
-    const filter = barangs?.filter((item) => {
-      return item.title.toLowerCase().includes(e.target.value.toLowerCase());
-    });
-    setDataFilter(filter);
-  }
-
-  console.log("filter", dataFilter);
-
-  useEffect(() => {
-    if (barangs) setDataFilter(barangs);
-  }, [barangs]);
+  let count = state.length;
 
   const handleDelete = (id) => {
     setIdDelete(id);
@@ -84,149 +65,289 @@ function DataBarang() {
   });
   //   let count = dataFilter.length - 7;
 
+  const [data, setdata] = useState([
+    [
+      "Tiger Nixon",
+      "System Architect",
+      "Edinburgh",
+      "5421",
+      "2011/04/25",
+      "$320,800",
+    ],
+    [
+      "Garrett Winters",
+      "Accountant",
+      "Tokyo",
+      "8422",
+      "2011/07/25",
+      "$170,750",
+    ],
+    [
+      "Ashton Cox",
+      "Junior Technical Author",
+      "San Francisco",
+      "1562",
+      "2009/01/12",
+      "$86,000",
+    ],
+    [
+      "Cedric Kelly",
+      "Senior Javascript Developer",
+      "Edinburgh",
+      "6224",
+      "2012/03/29",
+      "$433,060",
+    ],
+    ["Airi Satou", "Accountant", "Tokyo", "5407", "2008/11/28", "$162,700"],
+    [
+      "Brielle Williamson",
+      "Integration Specialist",
+      "New York",
+      "4804",
+      "2012/12/02",
+      "$372,000",
+    ],
+    [
+      "Herrod Chandler",
+      "Sales Assistant",
+      "San Francisco",
+      "9608",
+      "2012/08/06",
+      "$137,500",
+    ],
+    [
+      "Rhona Davidson",
+      "Integration Specialist",
+      "Tokyo",
+      "6200",
+      "2010/10/14",
+      "$327,900",
+    ],
+    [
+      "Colleen Hurst",
+      "Javascript Developer",
+      "San Francisco",
+      "2360",
+      "2009/09/15",
+      "$205,500",
+    ],
+    [
+      "Sonya Frost",
+      "Software Engineer",
+      "Edinburgh",
+      "1667",
+      "2008/12/13",
+      "$103,600",
+    ],
+    [
+      "Jena Gaines",
+      "Office Manager",
+      "London",
+      "3814",
+      "2008/12/19",
+      "$90,560",
+    ],
+    [
+      "Quinn Flynn",
+      "Support Lead",
+      "Edinburgh",
+      "9497",
+      "2013/03/03",
+      "$342,000",
+    ],
+    [
+      "Charde Marshall",
+      "Regional Director",
+      "San Francisco",
+      "6741",
+      "2008/10/16",
+      "$470,600",
+    ],
+    [
+      "Haley Kennedy",
+      "Senior Marketing Designer",
+      "London",
+      "3597",
+      "2012/12/18",
+      "$313,500",
+    ],
+    [
+      "Tatyana Fitzpatrick",
+      "Regional Director",
+      "London",
+      "1965",
+      "2010/03/17",
+      "$385,750",
+    ],
+    [
+      "Michael Silva",
+      "Marketing Designer",
+      "London",
+      "1581",
+      "2012/11/27",
+      "$198,500",
+    ],
+    [
+      "Paul Byrd",
+      "Chief Financial Officer (CFO)",
+      "New York",
+      "3059",
+      "2010/06/09",
+      "$725,000",
+    ],
+    [
+      "Gloria Little",
+      "Systems Administrator",
+      "New York",
+      "1721",
+      "2009/04/10",
+      "$237,500",
+    ],
+    [
+      "Bradley Greer",
+      "Software Engineer",
+      "London",
+      "2558",
+      "2012/10/13",
+      "$132,000",
+    ],
+    [
+      "Dai Rios",
+      "Personnel Lead",
+      "Edinburgh",
+      "2290",
+      "2012/09/26",
+      "$217,500",
+    ],
+    [
+      "Jenette Caldwell",
+      "Development Lead",
+      "New York",
+      "1937",
+      "2011/09/03",
+      "$345,000",
+    ],
+    [
+      "Yuri Berry",
+      "Chief Marketing Officer (CMO)",
+      "New York",
+      "6154",
+      "2009/06/25",
+      "$675,000",
+    ],
+    [
+      "Caesar Vance",
+      "Pre-Sales Support",
+      "New York",
+      "8330",
+      "2011/12/12",
+      "$106,450",
+    ],
+    [
+      "Doris Wilder",
+      "Sales Assistant",
+      "Sidney",
+      "3023",
+      "2010/09/20",
+      "$85,600",
+    ],
+    [
+      "Angelica Ramos",
+      "Chief Executive Officer (CEO)",
+      "London",
+      "5797",
+      "2009/10/09",
+      "$1,200,000",
+    ],
+    ["Gavin Joyce", "Developer", "Edinburgh", "8822", "2010/12/22", "$92,575"],
+    [
+      "Jennifer Chang",
+      "Regional Director",
+      "Singapore",
+      "9239",
+      "2010/11/14",
+      "$357,650",
+    ],
+    [
+      "Brenden Wagner",
+      "Software Engineer",
+      "San Francisco",
+      "1314",
+      "2011/06/07",
+      "$206,850",
+    ],
+    [
+      "Fiona Green",
+      "Chief Operating Officer (COO)",
+      "San Francisco",
+      "2947",
+      "2010/03/11",
+      "$850,000",
+    ],
+    [
+      "Shou Itou",
+      "Regional Marketing",
+      "Tokyo",
+      "8899",
+      "2011/08/14",
+      "$163,000",
+    ],
+    [
+      "Michelle House",
+      "Integration Specialist",
+      "Sidney",
+      "2769",
+      "2011/06/02",
+      "$95,400",
+    ],
+    ["Suki Burks", "Developer", "London", "6832", "2009/10/22", "$114,500"],
+    [
+      "Prescott Bartlett",
+      "Technical Author",
+      "London",
+      "3606",
+      "2011/05/07",
+      "$145,000",
+    ],
+    [
+      "Gavin Cortez",
+      "Team Leader",
+      "San Francisco",
+      "2860",
+      "2008/10/26",
+      "$235,500",
+    ],
+    [
+      "Martena Mccray",
+      "Post-Sales support",
+      "Edinburgh",
+      "8240",
+      "2011/03/09",
+      "$324,050",
+    ],
+    [
+      "Unity Butler",
+      "Marketing Designer",
+      "San Francisco",
+      "5384",
+      "2009/12/09",
+      "$85,675",
+    ],
+  ]);
+
   return (
     <>
-      <Row>
-        <Col>
-          <h3 className="w-100 px-5 py-4">My Link</h3>
-          <Row
-            style={{ backgroundColor: "#ECECEC", height: "100vh" }}
-            className="pt-5"
-          >
-            <Container className="w-100 px-5 py-3">
-              <Row xs="auto">
-                <Col>
-                  <h4>All Link</h4>
-                </Col>
-                <Col>
-                  {/* <h6
-                    style={{
-                      color: "white",
-                      backgroundColor: "#FF9F00",
-                      width: "25px",
-                      borderRadius: "10px",
-                      textAlign: "center",
-                      marginTop: "6px",
-                    }}
-                  >
-                    {count}
-                  </h6> */}
-                </Col>
-                <Col sm={9}>
-                  <Form.Group className=" mb-5 border-bottom border-secondary">
-                    <Form.Control
-                      placeholder="Find your link"
-                      type="text"
-                      name="email"
-                      onChange={handleChangeBarang}
-                      style={{
-                        border: "0px ",
-                        backgroundColor: "#ECECEC",
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Button
-                    as={Link}
-                    to="/datalink"
-                    type="submit"
-                    style={{
-                      color: "white",
-                      backgroundColor: "#FF9F00",
-                      border: "none",
-                    }}
-                  >
-                    Search
-                  </Button>
-                </Col>
-              </Row>
-              <div
-                style={{
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                  overflowY: "scroll",
-                  height: "500px",
-                }}
-              >
-                {dataFilter
-                  ?.filter((item) => item.user_id === user.data.id)
-                  .map((item, id) => {
-                    return (
-                      <Row className="mt-5 w-100 d-flex">
-                        <Col sm={1}>
-                          <img
-                            src={item?.image}
-                            alt=""
-                            className="w-100 mt-2"
-                          />
-                        </Col>
-                        <Col sm={4}>
-                          <Row>
-                            <Col>
-                              <h3>{item?.title}</h3>
-                              <a
-                                href={item?.linkWeb}
-                                style={{
-                                  color: "black",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                <p>{item?.linkWeb}</p>
-                              </a>
-                            </Col>
-                          </Row>
-                        </Col>
-
-                        <Col sm={2} className="mx-5">
-                          {/* <h3>10</h3>
-
-                          <p>Visit</p> */}
-                        </Col>
-
-                        {/* <Col sm={1}>
-                          <Link
-                            to={`/template/${item.id}`}
-                            // {`/result/${item.id}`}
-                          >
-                            <img src={view} alt="" />
-                          </Link>
-                        </Col>
-                        <Col sm={1}>
-                          <Link to={`/Update_link/${item.id}`}>
-                            <img src={edit} alt="" />
-                          </Link>
-                        </Col>
-                        <Col sm={1}>
-                          <Button
-                            onClick={
-                              () => handleDelete(item?.id)
-                              // setShow(true)
-                            }
-                            style={{
-                              backgroundColor: "#ECECEC",
-                              border: "none",
-                              padding: "0px",
-                            }}
-                          >
-                            <img src={delet} alt="" />
-                          </Button>
-                        </Col> */}
-                      </Row>
-                    );
-                  })}
-              </div>
-              <Delete
-                setConfirmDelete={setConfirmDelete}
-                show={show}
-                setShow={setShow}
-                handleClose={handleClose}
-                handleDelete={handleDelete}
-              />
-            </Container>
-          </Row>
-        </Col>
-      </Row>
+      <logo />
+      <Container fluid className="w-100 px-5 py-3">
+        <Tbl data={data}></Tbl>
+        <Delete
+          setConfirmDelete={setConfirmDelete}
+          show={show}
+          setShow={setShow}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        />
+      </Container>
     </>
   );
 }
