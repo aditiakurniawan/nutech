@@ -7,15 +7,15 @@ import { useQuery } from "react-query";
 import { useMutation } from "react-query";
 import { API } from "../config/api";
 import Delete from "../components/modal/Delete";
-import { Pagination } from "@mantine/core";
+import { Modal, Group } from "@mantine/core";
 import logo from "../assets/images/Logo.png";
 import Tbl from "./Tbl";
+import Add from "../components/modal/Add";
 
 function DataBarang() {
   document.title = `My Stock`;
+  const [modalShow, setModalShow] = React.useState(false);
   const state = useContext(UserContext);
-
-  const [dataFilter, setDataFilter] = useState([]);
 
   const [idDelete, setIdDelete] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
@@ -30,7 +30,9 @@ function DataBarang() {
     const response = await API.get("/barangs");
     console.log("ini response", response);
     return response.data.data;
+    // setData(response.data.data);
   });
+
   console.log("ini", barangs);
   let count = state.length;
 
@@ -65,7 +67,7 @@ function DataBarang() {
   });
   //   let count = dataFilter.length - 7;
 
-  const [data, setdata] = useState([
+  const [data, setData] = useState([
     [
       "Tiger Nixon",
       "System Architect",
@@ -337,17 +339,26 @@ function DataBarang() {
 
   return (
     <>
-      <logo />
-      <Container fluid className="w-100 px-5 py-3">
-        <Tbl data={data}></Tbl>
-        <Delete
-          setConfirmDelete={setConfirmDelete}
-          show={show}
-          setShow={setShow}
-          handleClose={handleClose}
-          handleDelete={handleDelete}
-        />
-      </Container>
+      <img src={logo} alt="" className="ms-4 mt-4 d-flex mx-auto" />
+      <div>
+        <Button variant="danger" onClick={() => setModalShow(true)}>
+          Tambah Barang
+        </Button>
+      </div>
+
+      <Add show={modalShow} onHide={() => setModalShow(false)} />
+      {barangs && (
+        <Container fluid className="w-100 px-5 py-3">
+          <Tbl data={barangs}></Tbl>
+          <Delete
+            setConfirmDelete={setConfirmDelete}
+            show={show}
+            setShow={setShow}
+            handleClose={handleClose}
+            handleDelete={handleDelete}
+          />
+        </Container>
+      )}
     </>
   );
 }

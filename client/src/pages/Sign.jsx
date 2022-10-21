@@ -52,9 +52,9 @@ function Sign() {
         });
 
         if (response?.status === 200) {
-          navigate("/login");
+          navigate("/data");
         } else {
-          navigate("/");
+          navigate("/login");
         }
 
         const alert = (

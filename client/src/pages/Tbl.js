@@ -6,17 +6,16 @@ $.Datatable = require("datatables.net");
 
 export default class Tbl extends Component {
   componentDidMount() {
-    console.log(this.el);
-    this.$el = $(this.el);
+    this.$el = $("#mainTable");
     this.$el.DataTable({
       data: this.props.data,
       columns: [
-        { title: "Name" },
-        { title: "Position" },
-        { title: "Office" },
-        { title: "Extn." },
-        { title: "Start date" },
-        { title: "Salary" },
+        { title: "ID", data: "id" },
+        { title: "Nama", data: "nama" },
+        { title: "Foto", data: "foto" },
+        { title: "Harga Beli", data: "hargabeli." },
+        { title: "Harga Jual", data: "hargajual" },
+        { title: "Stok", data: "stok" },
       ],
     });
   }
@@ -26,11 +25,7 @@ export default class Tbl extends Component {
   render() {
     return (
       <div>
-        <table
-          className="display"
-          width="100%"
-          ref={(el) => (this.el = el)}
-        ></table>
+        <table id="mainTable" class="table table-striped" width="100%"></table>
       </div>
     );
   }
